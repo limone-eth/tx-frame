@@ -7,6 +7,8 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 
+import Image from "next/image";
+
 type State = {
   active: string;
   total_button_presses: number;
@@ -41,18 +43,20 @@ export default async function Home({
 
   const { txHash, chain } = params;
 
+  const txUrl = `https://zapper.xyz/event/${chain}/${txHash}`;
+  const imageUrl = `https://og.onceupon.gg/card/${txHash}`;
   return (
-    <div>
-      Transaction frame for {txHash} on {chain}
+    <div className="flex flex-col justify-center">
+      <a href={txUrl} target="_blank">
+        <Image src={imageUrl} alt="tx-img" width={600} height={315} />
+      </a>
       <FrameContainer
         postUrl="/frames"
         state={state}
         previousFrame={previousFrame}
       >
-        <FrameImage src={`https://og.onceupon.gg/card/${txHash}`} />
-        <FrameButton href={`https://zapper.xyz/event/${chain}/${txHash}`}>
-          Check on Zapper ⚡️
-        </FrameButton>
+        <FrameImage src={imageUrl} />
+        <FrameButton href={txUrl}>Check on Zapper ⚡️</FrameButton>
       </FrameContainer>
     </div>
   );
